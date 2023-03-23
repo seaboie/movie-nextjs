@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google'
 import Movie, { MovieProps } from './about/movie'
+import { Suspense } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,24 +16,25 @@ export default async function Home() {
 
   const res = await data.json()
   console.log(res);
-  
+
 
   return (
     <main className='my-12'>
       <h1 className='text-6xl'>Hello Next 13 🔥</h1>
       <div className='grid gap-16 grid-cols-fluid'>
-      {
-        res.results.map((movie: { id: string ; title: string; poster_path: string; release_date: string }) => (
-          <>
-            <Movie 
-            id={movie.id}
-            title={movie.title}
-            key={movie.id}
-            poster_path={movie.poster_path}
-            release_date={movie.release_date} runtime={''} status={''} backdrop_path={''} overview={''} />
-          </>
-        ))
-      }
+        {
+          res.results.map((movie: { id: string; title: string; poster_path: string; release_date: string }) => (
+
+            <Suspense fallback={<div>Loading...</div>}>
+              <Movie
+                id={movie.id}
+                title={movie.title}
+                poster_path={movie.poster_path}
+                release_date={movie.release_date} runtime={''} status={''} backdrop_path={''} overview={''} />
+            </Suspense>
+
+          ))
+        }
       </div>
     </main>
   )
